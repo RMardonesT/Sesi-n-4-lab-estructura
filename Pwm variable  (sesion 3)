@@ -1,0 +1,33 @@
+#include  "msp430_version.h"
+
+void main(void)
+{
+	WDTCTL = WDTPW + WDTHOLD;
+	P2DIR |= 0x08;	  // P1.0 salida
+    P2SEL |= 0x08;     //define el pun 4 como periférico 
+	TACCTL0 = CCIE;			// TACCR0 habilita interrupcion del timer
+    TACCTL1 = OUTMOD_2;     //define el modo de slaida del periférico
+	TACCR0 = 100;           //
+    
+	TACTL = TASSEL_2 + MC_1 ; 	// reloj de subsistema, modo up
+    
+    
+    
+	_BIS_SR(LPM0_bits + GIE); 	// modo bajo consumo e interrupciones
+}
+
+// Timer A0 rutina de servicio de interrupciÃ³n
+#pragma vector = TIMERA0_VECTOR
+__interrupt void Timer_A (void)
+{
+    int F = 0xFF; // sobra
+    
+	if(P2IN & F){ //malo  
+      // if ((P2IN & BIT4) ==1){
+     TACCR1 = 34;
+    }
+    else{
+      TACCR1= 80;
+    }
+}
+
