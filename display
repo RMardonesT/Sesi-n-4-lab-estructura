@@ -109,7 +109,7 @@ unsigned char display_wait_BF(void)
 
         LCD_READ(add);
 	a = (add & 0x80); 
-        udelay(50); // solucion parche!!
+        //udelay(50); // solucion parche!!
 	}
 	return add;
 }
@@ -355,10 +355,10 @@ int putchar(int c)
 	{
        if (linea == 0)
        {
-         display_set_pos(0x00); // cursor al principio de la primera linea (0x00)
+         display_send_cmd(0x2); // cursor al principio de la primera linea (0x00)
          return c;
         }
-       display_set_pos(0x40); // cursor al principio de la primera linea (0x40)
+       else (display_set_pos(0x40)); // cursor al principio de la primera linea (0x40)
 		return c;
 	}
     
@@ -366,39 +366,33 @@ int putchar(int c)
     
     
 	if (c == '\t'){     // tab  hay que arreglarla parece
-        if (dir_actual==0x00|0x01|0x02|0x03){
-               display_lcd_copy( 0x04-dir_actual, 0x04,0x0F-0x04);
+        if (dir_actual==0x00|dir_actual==0x01|dir_actual==0x02|dir_actual==0x03){               
 			   display_set_pos(0x04);
                }
         
-        if (dir_actual==0x04|0x05|0x06|0x07){
-               display_lcd_copy(0x08-dir_actual,0x08, 0x0F-0x08);
+        if (dir_actual==0x04|dir_actual==0x05|dir_actual==0x06|dir_actual==0x07){               
 			   display_set_pos(0x08);
                }
         
-		if (dir_actual==0x08|0x09|0x0A|0x0B)
-               display_lcd_copy(0x0C-dir_actual, 0x0C, 0x0F-0x0C);
-			   display_set_pos(0x0C);
-              
-			if (dir_actual==0x0C|0x0D|0x0E|0x0F)
-               //display_lcd_copy(0x0F-dir_actual, 0x40, 
+		if (dir_actual==0x08|dir_actual==0x09|dir_actual==0x0A|dir_actual==0x0B){               
+          display_set_pos(0x0C);
+        }
+		if (dir_actual==0x0C|dir_actual==0x0D|dir_actual==0x0E|dir_actual==0x0F){               
 			   display_set_pos(0x40);
+        }
             
-			if (dir_actual==0x40|0x41|0x42|0x43)
-               display_lcd_copy(0x44-dir_actual, 0x44, 0x4F-dir_actual);
+		if (dir_actual==0x40|dir_actual==0x41|dir_actual==0x42|dir_actual==0x43){
 			   display_set_pos(0x44);
-            
-			if (dir_actual==0x44|0x45|0x46|0x47)
-               display_lcd_copy(0x48-dir_actual, 0x48, 0x4F-dir_actual);
+        }
+		if (dir_actual==0x44|dir_actual==0x45|dir_actual==0x46|dir_actual==0x47){              
 			   display_set_pos(0x48);
-            
-			if (dir_actual==0x48|0x49|0x4A|0x4B)
-               display_lcd_copy(0x4C-dir_actual, 0x4C, 0x4F-dir_actual);
-			   display_set_pos(0x4C);
-            
-			if (dir_actual==0x4C|0x4D|0x4E|0x4F)
-               display_lcd_copy(0x4F-dir_actual, 0x00, 0x4F-dir_actual);
+        }
+		if (dir_actual==0x48|dir_actual==0x49|dir_actual==0x4A|dir_actual==0x4B){             
+			   display_set_pos(0x4C);           
+        }        
+		if (dir_actual==0x4C|dir_actual==0x4D|dir_actual==0x4E|dir_actual==0x4F){
 			   display_set_pos(0x00);
+        }
 		return c;
 	}
     
